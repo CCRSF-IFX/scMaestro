@@ -1,0 +1,4 @@
+test4smk/**
+.snakemake/**
+__pycache__/**
+**.ipynb_checkpoints/**
