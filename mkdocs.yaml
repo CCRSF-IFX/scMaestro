@@ -1,0 +1,40 @@
+# Project Information
+site_name: scMaestro Documentation
+site_author: Shaojun Xie @ CCRSFIFX
+site_description: >-
+  scMaestro is a Python wrapper which helps set up analysis folder
+  for your single cell data, mainly 10X products and PIPseq data.  
+
+# Repository
+repo_name: CCRSF-IFX/scMaestro
+repo_url: https://github.com/CCRSF-IFX/scMaestro.git 
+edit_uri: https://github.com/CCRSF-IFX/scMaestro/edit/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2024 CCRSFIFX
+
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - rust
+
+# Customization
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/CCRSF-IFX
+
+# Page Tree
+nav:
+  - Introduction:
+      - About: index.md
+      - Design: design.md
+      - run: internal/run.md
+  - Usage:
+      - GEX data analysis: gex.md
+  - FAQ:
+      - General Questions: general-questions.md
+      - Troubleshooting: troubleshooting.md
+  - License: license.md
