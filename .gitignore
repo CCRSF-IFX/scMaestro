@@ -1,3 +1,5 @@
+lib/__pycache__/**
+.vscode/**
 test4smk/**
 .snakemake/**
 **__pycache__/**
