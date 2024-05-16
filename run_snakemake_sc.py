@@ -80,16 +80,16 @@ if __name__ == '__main__':
         parents = [parent_parser], 
         help='Snakemake pipeline for 10x spatial data')
     parser_spatial.add_argument("--images", metavar="images",
-        action = "store", type=str, 
+        action = "store", type=str, required= True, 
         help="Metadata for image information. [Required if spatial pipeline is used]")
     spatial_methods = ["cytassist_v1", "cytassist_v2", "non_cytassist"]
     parser_spatial.add_argument("--spatial-method", 
         metavar=f"spatial_method {spatial_methods}", 
-        type=str, choices = spatial_methods,
-        help="""Specify the method used for spatial transcriptomics analysis. 
-              Options:                                                      
-              - 'cytassist_v1': Employ Cytassist method using probe set v1    
-              - 'cytassist_v2': Employ Cytassist method using probe set v2     
+        type=str, choices = spatial_methods, required= True, 
+        help="""Specify the method used for spatial transcriptomics analysis. \
+              Options:                                                        \
+              - 'cytassist_v1': Employ Cytassist method using probe set v1    \
+              - 'cytassist_v2': Employ Cytassist method using probe set v2    \
               - 'non_cytassist': Employ non-Cytassist method capturing  polyA mRNAs""")
     
     args = parser.parse_args()
