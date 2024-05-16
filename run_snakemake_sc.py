@@ -64,7 +64,7 @@ if __name__ == '__main__':
         help='Snakemake pipeline for 10x CellRanger multi analysis')
     parser_multi.add_argument("--cmo", action="store_true",
         help="CMO information will be used for multi analysis")
-    parser.add_argument("--count", action="store_true",
+    parser_multi.add_argument("--count", action="store_true",
         help="Run cellranger count for projects with HTO libraries \
                 with more 10 individuals mixed. ")
     
@@ -126,3 +126,4 @@ if __name__ == '__main__':
         samples = list(set(s.replace('Sample_', '') for s in set(samps)))
         samples = sorted(samples)
         write_configfile(args)
+        args.pipeline = vars(args)["command"]
