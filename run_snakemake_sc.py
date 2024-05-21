@@ -1,9 +1,12 @@
+#!/usr/bin/env
+
 import argparse
 import glob
 import itertools
 import logging as sflog
 import os
 import re
+import sys
 import subprocess
 sflog.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=sflog.DEBUG)
 
