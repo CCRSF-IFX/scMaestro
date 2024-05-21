@@ -97,7 +97,10 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     dict_cmd = vars(args)
-    sflog.info("Subcommand is: " + dict_cmd['command'])
+    if dict_cmd['command'] is None:
+        parser.print_help()
+        sys.exit(0)
+    sflog.info("Subcommand is: " + str(dict_cmd['command']))
     sflog.info(args)
     if args.dryrun or args.rerun or args.unlock:
         pipeline, fullanalysis = get_config_val("config.py")
