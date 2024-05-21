@@ -1,0 +1,10 @@
+path2run_snakemake_sc: /mnt/ccrsf-ifx/Software/github/scMaestro/run_snakemake_sc.py
+outdir: /mnt/ccrsf-static/Analysis/xies4/github_repos/pipeline_dev_test/test4pl_outdir_3sample_ext/
+## y or n to indicate whether you want to submit the job or not
+submit_job: "y"
+
+rna:
+    projectname: NyallLondon_CS032345_16scRNASeqTCRLib_081122
+    ref: hg38
+    fastqpath: ./raw_fastq/multi_3sample_subset/220824_A01806_0074_AHF2GLDMXY/HF2GLDMXY/outs/fastq_path/HF2GLDMXY
+    cell_number: 8000

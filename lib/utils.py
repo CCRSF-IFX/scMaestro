@@ -2,12 +2,13 @@ import os
 
 
 def write_configfile(args, work_path): 
+    args.pipeline = vars(args)["command"]
     with open('config.py', 'w') as f:
         if vars(args)["command"] != 'multirna':
             f.write('unaligned=["%s"]\n' % '","'.join([os.path.abspath(i) for i in args.fa.split(',')]))
             f.write('analysis="%s"\n' % (work_path))
             f.write('ref="%s"\n' % str(args.refgenome))
-        if vars(args)["command"]== 'rna':
+        if vars(args)["command"] == 'rna':
             if args.expect:
                     f.write('numcells="%s"\n' % str(args.expect))
             if args.force:
@@ -23,7 +24,34 @@ def write_configfile(args, work_path):
                 f.write('numcells=""\n')
         if args.cmo:
             f.write('cmo="%s"\n' % args.cmo)
-        
+        if args.pipeline == 'fb':
+            f.write('libraries=""\n')
+            f.write('features=""\n')
+        if args.pipeline == 'multirna':
+            f.write('label = ""\n')
+        if args.pipeline == 'multiome':
+            f.write('libraries=""\n')
+            if args.exclude_introns:
+                f.write('include_introns=False\n')
+        if args.pipeline == 'multi':
+            f.write('libraries=""\n')
+            if args.expect:
+                f.write('numcells="%s"\n' % ','.join([str(args.expect)] * int(len(samples)/2)))
+            if args.force:
+                f.write('numcells="%s"\n' % ','.join([str(args.force)] * int(len(samples)/2)))
+            if args.exclude_introns:
+                f.write('include_introns=False\n')
+            if args.count:
+                f.write('count=True\n')
+            f.write("#inner_enrichment_primers=<path>: needed when detecting gamma-delta chains or studying non-human-mouse species\n")
+        if args.pipeline == 'vdj':
+            if args.chain == "TR" or  args.chain == "TR":
+                f.write('chain="%s"\n' % args.chain)
+        if args.pipeline == "spatial":
+            f.write('images="%s"\n' % args.images)
+            f.write('spatial_method="%s"\n' % args.spatial_method)
+        f.write('pipeline="%s"\n' % str(args.pipeline))
+        f.write("#aggregate=False # Recommended value to set as 'False' when 1) three are too many samples (>10); 2) no donor and origin information provided for VDJ libraries;\n")
 
 def get_smk_file(pipeline, fullanalysis):
     """_Get the corresponding snakemake file_
