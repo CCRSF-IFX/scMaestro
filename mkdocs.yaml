@@ -33,7 +33,8 @@ nav:
       - Design: design.md
       - run: internal/run.md
   - Usage:
-      - GEX data analysis: gex.md
+      - Subcommand `rna`: gex.md
+      - Subcommand `multi`: multi.md
   - FAQ:
       - General Questions: general-questions.md
       - Troubleshooting: troubleshooting.md
