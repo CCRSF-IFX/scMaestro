@@ -35,6 +35,7 @@ nav:
   - Usage:
       - Subcommand `rna`: gex.md
       - Subcommand `multi`: multi.md
+      - Subcommand `vdj`: vdj.md
   - FAQ:
       - General Questions: general-questions.md
       - Troubleshooting: troubleshooting.md
