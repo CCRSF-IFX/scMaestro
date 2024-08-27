@@ -32,6 +32,7 @@ nav:
       - About: index.md
       - Design: design.md
       - run: internal/run.md
+      - Custom setting: custom_setting.md 
   - Usage:
       - Subcommand `rna`: gex.md
       - Subcommand `multi`: multi.md
