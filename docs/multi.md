@@ -41,6 +41,8 @@ The chain information is specified in 'feature_types' column. Valid specificatio
 
 
 For multi task with CRISPR Guide Capture libraries, "feature_reference" column is required to be put in the fifth column in "libraries.csv". 
+
+```
 Name,Flowcell,Sample,Type,Feature
 F1Test,AACCCHVM5,F1CRISPR_Library,Gene Expression,crispr_feature_reference1.csv
 F1Test,AACCCHVM5,F1GE_Library,CRISPR Guide Capture,crispr_feature_reference1.csv
@@ -48,6 +50,8 @@ F2Test,AACCCHVM5,F2CRISPR_Library,Gene Expression,crispr_feature_reference2.csv
 F2Test,AACCCHVM5,F2GE_Library,CRISPR Guide Capture,crispr_feature_reference2.csv
 F3Test,AACCCHVM5,F3CRISPR_Library,Gene Expression,crispr_feature_reference3.csv
 F3Test,AACCCHVM5,F3GE_Library,CRISPR Guide Capture,crispr_feature_reference3.csv
+```
+
 The descriptions of the feature reference CSV file can be found here. In case of varying feature references for different GEX/CRISPR pairs, the fifth column can be used to provide different references.
 
 If an antibody capture was used, then a feature reference file will need to be provided in the config.py file with a features entry. There is currently no pipeline flag to add this, and it will need to be provided manually. For example:
@@ -56,11 +60,13 @@ features="features.csv"
 
 The feature reference file would contain (at minimum) a unique ID for the feature, human readable name, read, pattern, sequence, and feature type. For example:
 
+```
 id,name,sequence,feature_type,read,pattern
 CITE_CD64,CD64,AGCAATTAACGGGAG,Antibody Capture,R2,5PNNNNNNNNNN(BC)
 CITE_F4_80,F4_80,TTAACTTCAGCCCGT,Antibody Capture,R2,5PNNNNNNNNNN(BC)
 CITE_CD8a,CD8a,TACCCGTAATAGCGT,Antibody Capture,R2,5PNNNNNNNNNN(BC)
 CITE_XCR1,XCR1,TCCATTACCCACGTT,Antibody Capture,R2,5PNNNNNNNNNN(BC)
+```
 
 Unless the information is provided, it is probably easiest to determine the pattern by checking the FASTQ file for the sequence location. More information can be found at: https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis
 
@@ -70,13 +76,13 @@ cmo="cmo.csv"
 
 The cmo reference file has a very similar format to the feature reference file. The difference is that the feature type would be Multiplexing Capture. For example:
 
+```
 id,name,sequence,feature_type,read,pattern
 HTO_1,HTO_1,GTCAACTCTTTAGCG,Multiplexing Capture,R2,5P(BC)
 HTO_2,HTO_2,TGATGGCCTATTGGG,Multiplexing Capture,R2,5P(BC)
 HTO_3,HTO_3,TTCCGCCTCTCTTTG,Multiplexing Capture,R2,5P(BC)
 HTO_4,HTO_4,AGTAAGTTCAGCGTA,Multiplexing Capture,R2,5P(BC)
+```
 
 When the cmo information is filled into the sample configuration file, it will directly use the cmo ID as the multiplexing sample ID. This would need to be manually edited if a different entry would want to be included.
-
-
 
