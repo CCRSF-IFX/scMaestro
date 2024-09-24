@@ -8,9 +8,12 @@ import os
 import re
 import sys
 import subprocess
+import pandas as pd
+
 sflog.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=sflog.DEBUG)
 
-from lib.utils import get_smk_file, write_configfile, get_config_val
+from lib.utils import prep_ref, get_smk_file, write_configfile, get_config_val
+from lib.argparse_multi import multi_conditional_required_flag
 
 # get the path of the script
 bin_path = os.path.dirname(os.path.realpath(__file__))
@@ -19,93 +22,11 @@ work_path = os.getcwd()
 os.chdir(work_path)
 print(work_path)
 
-class ConditionalRequiredAction4multi(argparse.Action):
-    # https://docs.python.org/3/library/argparse.html#action
-    def __call__(self, parser, namespace, values, option_string=None):
-        # Save the input file name to the namespace
-        setattr(namespace, self.dest, values)
-        
-        # Read the content of the input file
-        with open(values, 'r') as file:
-            content = file.read()
-        
-        # Check if the file contains 'TCR'
-        if 'TCR' in content:
-            # If it contains 'TCR', another argument becomes required
-            if not namespace.other_arg:
-                parser.error("argument --other-arg is required when input file contains 'TCR'")
-
 class UniqueStore(argparse.Action):
     def __call__(self, parser, namespace, values, option_string):
         if getattr(namespace, self.dest, self.default) is not self.default:
             parser.error(option_string + " appears several times.")
         setattr(namespace, self.dest, values)
-
-#!def prep_config(args):
-#!    with open('config.py', 'w') as f:
-#!        if args.pipeline != 'multirna':
-#!            f.write('unaligned=["%s"]\n' % '","'.join([os.path.abspath(i) for i in args.fastqs]))
-#!        f.write('analysis="%s"\n' % (work_path)) 
-#!        f.write('ref="%s"\n' % str(args.genome)) 
-#!        if args.pipeline == 'rna':
-#!            if args.expect:
-#!                f.write('numcells="%s"\n' % ','.join([str(args.expect)] * len(samples)))
-#!            if args.force:
-#!                f.write('numcells="%s"\n' % ','.join([str(args.force)] * len(samples)))
-#!            if args.exclude_introns:
-#!                f.write('include_introns=False\n')
-#!        if args.pipeline == 'pipseq':
-#!            if args.force:
-#!                f.write('numcells="%s"\n' % ','.join([str(args.force)] * len(samples)))
-#!        if args.force:
-#!            if not (args.pipeline == 'vdj' or args.pipeline == 'multirna'):
-#!                f.write('forcecells=True\n')
-#!            if args.pipeline == 'atac':
-#!                    f.write('numcells=""\n')
-
-def get_smk_file(pipeline, fullanalysis):
-    if pipeline == "rna":
-        if fullanalysis:
-            return "workflow/Snakefile_rna_fullanalysis"
-        else:
-            return "workflow/Snakefile_rna"
-    elif pipeline == "multi":
-        return "workflow/Snakefile_multi"
-    elif pipeline == "spatial":
-        return "workflow/Snakefile_spatial"
-    elif pipeline == "vdj":
-        return "workflow/Snakefile_vdj"
-    elif pipeline == "multiome":
-        return "workflow/Snakefile_multiome"
-    elif pipeline == "atac":
-        return "workflow/Snakefile_atac"
-    elif pipeline == "nopipe":
-        return "workflow/Snakefile_nopipe"
-    elif pipeline == "pipseq":
-        return "workflow/Snakefile_pipseq"
-    elif pipeline == "multirna":
-        return "workflow/Snakefile_multirna"
-    else:
-        pass
-
-def prep_ref(args):
-    with open('reference.py', 'w') as f:
-        f.write(f'''
-import config
-genomename = ""
-if config.ref == "{args.genome}":
-''')
-        f.write(f'    genomename = "{args.genome}"\n')
-        if args.pipeline == 'rna' or args.pipeline == 'multi':
-            f.write(f'    transcriptome = "{args.reference}"\n')
-        if args.pipeline == 'atac':
-            f.write(f'    atac_reference = "{args.reference}"\n')
-        if args.pipeline == 'multiome':
-            f.write(f'    arc_reference = "{args.reference}"\n') 
-        if args.pipeline == 'vdj':
-            f.write(f'    vdj_reference = "{args.vdj_reference}"\n') 
-        if args.pipeline == 'pipseq':
-            f.write(f'    pipseq_reference = "{args.reference}"\n')
 
 def main(args):
     #prep_config(args)
@@ -114,8 +35,10 @@ def main(args):
     subprocess.check_output('cat %s/workflow/config/program.py |grep -v "copydir = " | grep -v "active_scripts =" > program.py' % bin_path, shell=True) 
     subprocess.check_output('cp -r %s/workflow/ .' % bin_path, shell=True) 
     subprocess.check_output('cp %s/workflow/config/submit_ext.sh submit.sh' % bin_path, shell=True) 
+    args.fullanalysis = getattr(args, "fullanalysis", False)
     smk_file = get_smk_file(args.pipeline, args.fullanalysis)
     smk_file_re = re.sub(r"/", r"\/", smk_file)
+    print(smk_file_re)
     os.system("""sed -i "s/snakemake --jobname/snakemake -s %s --jobname /" %s """ % (smk_file_re, "submit.sh"))
     print('CONFIG FILE:')
     with open('config.py') as f:
@@ -125,7 +48,7 @@ def main(args):
         submit = input('Please answer yes(y) or no(n): ')
     if submit.lower() == 'y':
         subprocess.check_output('sbatch submit.sh', shell=True)
-        print("Submitted snakemake run for %s in %s" % (args.fastq_path, work_path))
+        print("Submitted snakemake run for %s in %s" % (",".join(args.fastqs), work_path))
 
 if __name__ == '__main__':
     ## description - Text to display before the argument help (default: none)
@@ -170,16 +93,24 @@ if __name__ == '__main__':
     parser_rna = subparsers.add_parser("rna", 
         parents = [parent_parser, parent_parser_fa, parent_parser_cellnum], 
         help='Snakemake pipeline for 10x scRNA-seq data')
+
     ## multi pipeline
     parser_multi = subparsers.add_parser("multi", 
-        parents = [parent_parser, parent_parser_vdjchain], 
+        parents = [parent_parser, parent_parser_vdjchain, parent_parser_fa], 
         help='Snakemake pipeline for 10x CellRanger multi analysis')
+    parser_multi.add_argument("--vdj_ref",
+        help="Reference folder for VDJ data ")
+    parser_multi.add_argument("-l", "--library_config", 
+        required=True, 
+        help="CSV file with the library configration. ")
+    #parser_multi.add_argument("--ref_vdj", type = str,  
+    #    help="Reference folder for VDJ data ")
     parser_multi.add_argument("--cmo", action="store_true",
         help="CMO information will be used for multi analysis")
     parser_multi.add_argument("--count", action="store_true",
         help="Run cellranger count for projects with HTO libraries \
                 with more 10 individuals mixed. ")
-    
+     
     parser_vdj = subparsers.add_parser("vdj", 
         parents = [parent_parser, parent_parser_vdjchain], 
         help='Snakemake pipeline for 10x VDJ data')
@@ -203,8 +134,10 @@ if __name__ == '__main__':
               - 'cytassist_v1': Employ Cytassist method using probe set v1    \
               - 'cytassist_v2': Employ Cytassist method using probe set v2    \
               - 'non_cytassist': Employ non-Cytassist method capturing  polyA mRNAs""")
-    
+     
     args = parser.parse_args()
+    multi_conditional_required_flag(args, parser)
+    print(args)
     dict_cmd = vars(args)
     if dict_cmd['command'] is None:
         parser.print_help()
@@ -242,5 +175,5 @@ if __name__ == '__main__':
         samples = sorted(samples)
         write_configfile(args, work_path)
         args.pipeline = vars(args)["command"]
-
+        print(args)
         main(args)

@@ -5,9 +5,9 @@ def write_configfile(args, work_path):
     args.pipeline = vars(args)["command"]
     with open('config.py', 'w') as f:
         if vars(args)["command"] != 'multirna':
-            f.write('unaligned=["%s"]\n' % '","'.join([os.path.abspath(i) for i in args.fa.split(',')]))
+            f.write('unaligned=["%s"]\n' % '","'.join([os.path.abspath(i) for i in args.fastqs]))
             f.write('analysis="%s"\n' % (work_path))
-            f.write('ref="%s"\n' % str(args.refgenome))
+            f.write('ref="%s"\n' % str(args.genome))
         if vars(args)["command"] == 'rna':
             if args.expect:
                     f.write('numcells="%s"\n' % str(args.expect))
@@ -17,32 +17,32 @@ def write_configfile(args, work_path):
                 f.write('include_introns=False\n')
         if args.pipeline == 'pipseq' and args.force:
             f.write('numcells="%s"\n' % str(args.force)) 
-        if args.force:
-            if not (vars(args)["command"] == 'vdj' or vars(args)["command"] == 'multirna'):
-                f.write('forcecells=True\n')
-            if args.pipeline == 'atac':
-                f.write('numcells=""\n')
-        if args.cmo:
+        #if args.force:
+        #    if not (vars(args)["command"] == 'vdj':
+        #        f.write('forcecells=True\n')
+        #    if args.pipeline == 'atac':
+        #        f.write('numcells=""\n')
+        if hasattr(args, 'cmo') and args.cmo:
             f.write('cmo="%s"\n' % args.cmo)
         if args.pipeline == 'fb':
             f.write('libraries=""\n')
             f.write('features=""\n')
-        if args.pipeline == 'multirna':
-            f.write('label = ""\n')
+        #if args.pipeline == 'multirna':
+        #    f.write('label = ""\n')
         if args.pipeline == 'multiome':
             f.write('libraries=""\n')
             if args.exclude_introns:
                 f.write('include_introns=False\n')
         if args.pipeline == 'multi':
-            f.write('libraries=""\n')
-            if args.expect:
-                f.write('numcells="%s"\n' % ','.join([str(args.expect)] * int(len(samples)/2)))
-            if args.force:
-                f.write('numcells="%s"\n' % ','.join([str(args.force)] * int(len(samples)/2)))
-            if args.exclude_introns:
-                f.write('include_introns=False\n')
-            if args.count:
-                f.write('count=True\n')
+            f.write(f'libraries="{args.library_config}"\n')
+            #if args.expect:
+            #    f.write('numcells="%s"\n' % ','.join([str(args.expect)] * int(len(samples)/2)))
+            #if args.force:
+            #    f.write('numcells="%s"\n' % ','.join([str(args.force)] * int(len(samples)/2)))
+            #if args.exclude_introns:
+            #    f.write('include_introns=False\n')
+            #if args.count:
+            #    f.write('count=True\n')
             f.write("#inner_enrichment_primers=<path>: needed when detecting gamma-delta chains or studying non-human-mouse species\n")
         if args.pipeline == 'vdj':
             if args.chain == "TR" or  args.chain == "TR":
@@ -53,7 +53,7 @@ def write_configfile(args, work_path):
         f.write('pipeline="%s"\n' % str(args.pipeline))
         f.write("#aggregate=False # Recommended value to set as 'False' when 1) three are too many samples (>10); 2) no donor and origin information provided for VDJ libraries;\n")
 
-def get_smk_file(pipeline, fullanalysis):
+def get_smk_file(pipeline, fullanalysis = None):
     """_Get the corresponding snakemake file_
 
     Args:
@@ -70,6 +70,8 @@ def get_smk_file(pipeline, fullanalysis):
             return "workflow/Snakefile_rna"
     elif pipeline == "multi":
         return "workflow/Snakefile_multi"
+    elif pipeline == "vdj":
+        return "workflow/Snakefile_vdj"
     elif pipeline == "spatial":
         return "workflow/Snakefile_spatial"
     else:
@@ -93,3 +95,49 @@ def get_config_val(config_file):
             if line.startswith('fullanalysis='):
                 fullanalysis = line.rstrip().split('=')[-1].strip('"')
     return pipeline, fullanalysis
+
+def prep_ref(args):
+    with open('reference.py', 'w') as f:
+        f.write(f'''
+import config
+genomename = ""
+if config.ref == "{args.genome}":
+''')
+        f.write(f'    genomename = "{args.genome}"\n')
+        if args.pipeline == 'rna' or args.pipeline == 'multi':
+            f.write(f'    transcriptome = "{args.reference}"\n')
+            if getattr(args, 'vdj_ref', None):
+                f.write(f'    vdj_reference = "{args.vdj_ref}"\n')
+        if args.pipeline == 'atac':
+            f.write(f'    atac_reference = "{args.reference}"\n')
+        if args.pipeline == 'multiome':
+            f.write(f'    arc_reference = "{args.reference}"\n')
+        if args.pipeline == 'vdj':
+            f.write(f'    vdj_reference = "{args.reference}"\n')
+        if args.pipeline == 'pipseq':
+            f.write(f'    pipseq_reference = "{args.reference}"\n')
+
+##!def get_smk_file(pipeline, fullanalysis):
+##!    if pipeline == "rna":
+##!        if fullanalysis:
+##!            return "workflow/Snakefile_rna_fullanalysis"
+##!        else:
+##!            return "workflow/Snakefile_rna"
+##!    elif pipeline == "multi":
+##!        return "workflow/Snakefile_multi"
+##!    elif pipeline == "spatial":
+##!        return "workflow/Snakefile_spatial"
+##!    elif pipeline == "vdj":
+##!        return "workflow/Snakefile_vdj"
+##!    elif pipeline == "multiome":
+##!        return "workflow/Snakefile_multiome"
+##!    elif pipeline == "atac":
+##!        return "workflow/Snakefile_atac"
+##!    elif pipeline == "nopipe":
+##!        return "workflow/Snakefile_nopipe"
+##!    elif pipeline == "pipseq":
+##!        return "workflow/Snakefile_pipseq"
+##!    elif pipeline == "multirna":
+##!        return "workflow/Snakefile_multirna"
+##!    else:
+##!        pass
