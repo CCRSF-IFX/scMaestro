@@ -13,6 +13,7 @@ import pandas as pd
 sflog.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=sflog.DEBUG)
 
 from lib.utils import prep_ref, get_smk_file, write_configfile, get_config_val
+from lib.smk_arg import smk_rerun_dryrun_unlock
 from lib.argparse_multi import multi_conditional_required_flag
 
 # get the path of the script
@@ -134,7 +135,13 @@ if __name__ == '__main__':
               - 'cytassist_v1': Employ Cytassist method using probe set v1    \
               - 'cytassist_v2': Employ Cytassist method using probe set v2    \
               - 'non_cytassist': Employ non-Cytassist method capturing  polyA mRNAs""")
-     
+    
+    parser_rerun = subparsers.add_parser("rerun",
+        help='Equavalent of snakemake --rerun')
+    parser_rerun = subparsers.add_parser("dryrun",
+        help='Equavalent of snakemake --dryrun')
+    parser_rerun = subparsers.add_parser("unlock",
+        help='Equavalent of snakemake --unlock')
     args = parser.parse_args()
     multi_conditional_required_flag(args, parser)
     print(args)
@@ -144,23 +151,9 @@ if __name__ == '__main__':
         sys.exit(0)
     sflog.info("Subcommand is: " + str(dict_cmd['command']))
     sflog.info(args)
-    if args.dryrun or args.rerun or args.unlock:
-        pipeline, fullanalysis = get_config_val("config.py")
-        smk_file = get_smk_file(pipeline, fullanalysis)
-        sflog.debug(smk_file)
-        smk_output = subprocess.check_output(f'snakemake -s {smk_file} -np', shell=True)
-        if args.rerun:
-            sflog.info('CONFIG FILE:')
-            with open('config.py') as f:
-                print(f.read())
-            submit = input('Submit now? (y/n): ')
-            while submit.lower() not in ['y', 'n']:
-                submit = input('Please answer yes(y) or no(n): ')
-            if submit.lower() == 'y':
-                subprocess.check_output('sbatch submit.sh', shell=True)
-                sflog.info("Submitted snakemake rerun in directory")
-        if args.unlock:
-                subprocess.check_output(f'snakemake -s {smk_file} --unlock', shell=True)
+    print(dict_cmd['command'])
+    if dict_cmd['command'] == 'dryrun' or dict_cmd['command'] == 'rerun' or dict_cmd['command'] == 'unlock':
+        smk_rerun_dryrun_unlock(dict_cmd['command'], subparsers)
     else:
         work_path = os.getcwd()
         os.chdir(work_path)
