@@ -1,7 +1,7 @@
 import subprocess
 import os
-from .utils import get_config_val, get_smk_file
 import sys
+from .utils import get_config_val, get_smk_file
 
 def smk_rerun_dryrun_unlock(cmd, subparser):
     subcommands = [i for i in subparser.choices if i not in ['rerun', 'dryun', 'unlock']]
@@ -20,6 +20,6 @@ def smk_rerun_dryrun_unlock(cmd, subparser):
                 submit = input('Please answer yes(y) or no(n): ')
             if submit.lower() == 'y':
                 subprocess.check_output('sbatch submit.sh', shell=True)
-                sflog.info("Submitted snakemake rerun in directory")
+                print("Submitted snakemake rerun in directory")
         if cmd == 'unlock':
                 subprocess.check_output(f'snakemake -s {smk_file} --unlock', shell=True)
