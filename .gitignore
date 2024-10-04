@@ -1,9 +1,8 @@
 ## xies4nih@gmail.com: https://chatgpt.com/share/66fec993-0f38-8013-b773-9c640dc72932
 ## Commit message: https://chatgpt.com/share/66feed02-2460-8013-9d3b-b781468e626e
 #
-lib/__pycache__/**
+**/__pycache__/**
 .vscode/**
 test4smk/**
 .snakemake/**
-**__pycache__/**
 **.ipynb_checkpoints/**
