@@ -59,14 +59,14 @@ if __name__ == '__main__':
             action = UniqueStore, required=True, 
             help='Path(s) to fastq files, multiple paths can be provided together. eg. "-f path1 path2"')
     parent_parser.add_argument('-r', '--reference', metavar='REFERENCE FOLDER', 
-            help='Reference genome folder for alignment', required=True)
+            help='Reference folder for alignment', required=True)
     parent_parser.add_argument('-g', '--genome', 
             help='Genome build, e.g. "hg38", "mm10"', required=True)
-    parent_parser.add_argument("-n", "--dryrun", action="store_true", help="dry run") 
-    parent_parser.add_argument("--rerun", action="store_true",
-            help="dry run then prompt for submitting jobs that need to be rerun")
-    parent_parser.add_argument("--unlock", action="store_true",
-            help="unlock working directory")
+    #parent_parser.add_argument("-n", "--dryrun", action="store_true", help="dry run") 
+    #parent_parser.add_argument("--rerun", action="store_true",
+    #        help="dry run then prompt for submitting jobs that need to be rerun")
+    #parent_parser.add_argument("--unlock", action="store_true",
+    #        help="unlock working directory")
 
     parent_parser_fa = argparse.ArgumentParser(add_help=False) 
     parent_parser_fa.add_argument("--fullanalysis", action="store_true",
@@ -93,12 +93,15 @@ if __name__ == '__main__':
     ## rna pipeline
     parser_rna = subparsers.add_parser("rna", 
         parents = [parent_parser, parent_parser_fa, parent_parser_cellnum], 
-        help='Snakemake pipeline for 10x scRNA-seq data')
+        help='Snakemake pipeline for 10x scRNA-seq data analysis')
 
     ## multi pipeline
     parser_multi = subparsers.add_parser("multi", 
         parents = [parent_parser, parent_parser_vdjchain, parent_parser_fa], 
-        help='Snakemake pipeline for 10x CellRanger multi analysis')
+        help='Snakemake pipeline for 10x CellRanger multi data analysis')
+    parser_multi = subparsers.add_parser("atac", 
+        parents = [parent_parser, parent_parser_fa], 
+        help='Snakemake pipeline for 10x scATAC-seq data analysis')
     parser_multi.add_argument("--vdj_ref",
         help="Reference folder for VDJ data ")
     parser_multi.add_argument("-l", "--library_config", 
