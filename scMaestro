@@ -32,6 +32,16 @@ class UniqueStore(argparse.Action):
 def main(args):
     #prep_config(args)
     prep_ref(args)
+    
+    workflow_dir = os.path.join(os.getcwd(), 'workflow')
+
+    # Check if the workflow directory exists
+    if os.path.exists(workflow_dir):
+        print(f"The 'workflow' directory already exists at {workflow_dir}.")
+        print("Aborting process. Please remove the folder 'workflow' manually or rename it, or run subcommand 'rerun'")
+        exit(1)
+    else:
+        print("No existing 'workflow' folder. Proceeding with copy...")
 
     subprocess.check_output('cat %s/workflow/config/program.py |grep -v "copydir = " | grep -v "active_scripts =" > program.py' % bin_path, shell=True) 
     subprocess.check_output('cp -r %s/workflow/ .' % bin_path, shell=True) 
