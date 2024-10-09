@@ -59,7 +59,8 @@ if __name__ == '__main__':
             action = UniqueStore, required=True, 
             help='Path(s) to fastq files, multiple paths can be provided together. eg. "-f path1 path2"')
     parent_parser.add_argument('-r', '--reference', metavar='REFERENCE FOLDER', 
-            help='Reference folder for alignment', required=True)
+            help='Reference folder for alignment. VDJ reference is needed if subcommand "vdj" \
+            is used.', required=True)
     parent_parser.add_argument('-g', '--genome', 
             help='Genome build, e.g. "hg38", "mm10"', required=True)
     #parent_parser.add_argument("-n", "--dryrun", action="store_true", help="dry run") 
@@ -99,9 +100,6 @@ if __name__ == '__main__':
     parser_multi = subparsers.add_parser("multi", 
         parents = [parent_parser, parent_parser_vdjchain, parent_parser_fa], 
         help='Snakemake pipeline for 10x CellRanger multi data analysis')
-    parser_multi = subparsers.add_parser("atac", 
-        parents = [parent_parser, parent_parser_fa], 
-        help='Snakemake pipeline for 10x scATAC-seq data analysis')
     parser_multi.add_argument("--vdj_ref",
         help="Reference folder for VDJ data ")
     parser_multi.add_argument("-l", "--library_config", 
@@ -119,6 +117,10 @@ if __name__ == '__main__':
         parents = [parent_parser, parent_parser_vdjchain], 
         help='Snakemake pipeline for 10x VDJ data')
     
+    parser_atac = subparsers.add_parser("atac", 
+        parents = [parent_parser, parent_parser_fa], 
+        help='Snakemake pipeline for 10x scATAC-seq data analysis')
+
     parser_multiome = subparsers.add_parser("multiome", 
         parents = [parent_parser], 
         help='Snakemake pipeline for 10x Multiome ATAC + GEX data')
