@@ -16,6 +16,7 @@ multi:
     ref: /mnt/ccrsf-ifx/RefGenomes/10X_REF/refdata-cellranger-4.0.0/refdata-gex-GRCh38-2020-A
     fastqpath: /mnt/ccrsf-static/Analysis/xies4/github_repos/pipeline_dev_test/raw_fastq/multi_3sample_subset/220824_A01806_0074_AHF2GLDMXY/HF2GLDMXY/outs/fastq_path/HF2GLDMXY,/mnt/ccrsf-static/Analysis/xies4/github_repos/pipeline_dev_test/raw_fastq/multi_3sample_subset/220824_A01806_0075_BHFJVHDRX2/HFJVHDRX2/outs/fastq_path/HFJVHDRX2/
     cell_number: 8000
+    vdj_ref: /mnt/ccrsf-ifx/RefGenomes/10X_REF/refdata-cellranger-vdj-GRCm38-alts-ensembl-7.0.0
     lib_csv: /mnt/ccrsf-ifx/Software/github/SF_scMaestro/test_data/multi/libraries.csv
 
 vdj:
