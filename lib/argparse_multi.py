@@ -3,7 +3,7 @@ import pandas as pd
 def multi_conditional_required_flag(args, parser):
     # Read the content of the input file
     dict_cmd = vars(args) 
-    if dict_cmd['command'] not in ['rerun', 'dryun', 'unlock']:  
+    if dict_cmd['command'] == "multi":  # ['rerun', 'dryun', 'unlock']:  
         df = pd.read_csv(args.library_config)
         # Check if the file contains 'VDJ'
         if df['Type'].str.contains('VDJ').any():
