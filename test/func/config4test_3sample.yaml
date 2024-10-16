@@ -26,3 +26,15 @@ vdj:
     fastqpath: raw_fastq/multi_3sample_subset/220824_A01806_0075_BHFJVHDRX2/HFJVHDRX2/outs/fastq_path/HFJVHDRX2/
     chain: TR
 
+atac:
+    projectname: LouisStaudt_CS031886_32scMultiome_051622
+    genome: hg38
+    fastqpath: raw_fastq/multiome_3sample_subset/220606_A01615_0111_BHCKFLDRX2/HCKFLDRX2/outs/fastq_path/HCKFLDRX2/
+    ref: /mnt/ccrsf-ifx/Software/tools/GemCode/ATAC_Ref/refdata-cellranger-arc-GRCh38-2020-A-2.0.0
+
+multiome:
+    projectname: LouisStaudt_CS031886_32scMultiome_051622
+    genome: hg38
+    ref: /mnt/ccrsf-ifx/Software/tools/GemCode/ATAC_Ref/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 
+    fastqpath: raw_fastq/multiome_3sample_subset/220606_A01615_0110_AHCKFGDRX2/HCKFGDRX2/outs/fastq_path/HCKFGDRX2/,raw_fastq/multiome_3sample_subset/220606_A01615_0111_BHCKFLDRX2/HCKFLDRX2/outs/fastq_path/HCKFLDRX2/
+    lib_csv: /mnt/ccrsf-ifx/Software/github/SF_scMaestro/test_data/multiome/libraries4multiome3samples.csv
