@@ -72,6 +72,8 @@ def get_smk_file(pipeline, fullanalysis = None):
         return "workflow/Snakefile_multi"
     elif pipeline == "vdj":
         return "workflow/Snakefile_vdj"
+    elif pipeline == "atac":
+        return "workflow/Snakefile_atac"
     elif pipeline == "spatial":
         return "workflow/Snakefile_spatial"
     else:
