@@ -47,11 +47,23 @@ def write_configfile(args, work_path):
         if args.pipeline == 'vdj':
             if args.chain == "TR" or  args.chain == "TR":
                 f.write('chain="%s"\n' % args.chain)
+        if args.pipeline == "fixedrna":
+            if args.singleplex == False and args.multiplex == None:
+                sys.exit("\nEither --singleplex or --multiplex <multiplexing.csv> is required for FRP data\n")
+            if args.singleplex and args.multiplex != None:
+                sys.exit("\nOnly one of them is required for FRP data: --singleplex and --multiplex <multiplexing.csv>\n")
+            f.write(f'libraries="{args.library_config}"\n')
+            if args.multiplex != None: 
+                f.write(f'multiplex="{args.multiplex}"\n')
+            f.write(f'probe_set="{args.probe_set}"\n')
         if args.pipeline == "spatial":
             f.write('images="%s"\n' % args.images)
             f.write('spatial_method="%s"\n' % args.spatial_method)
         f.write('pipeline="%s"\n' % str(args.pipeline))
-        f.write("#aggregate=False # Recommended value to set as 'False' when 1) three are too many samples (>10); 2) no donor and origin information provided for VDJ libraries;\n")
+        if args.pipeline != "fixedrna":
+            f.write("#aggregate=False # Recommended value to set as 'False' when 1) three are too many samples (>10); 2) no donor and origin information provided for VDJ libraries;\n")
+        else:
+            f.write("aggregate=False # Default value for fixed RNA profiling data")
 
 def get_smk_file(pipeline, fullanalysis = None):
     """_Get the corresponding snakemake file_
@@ -76,6 +88,8 @@ def get_smk_file(pipeline, fullanalysis = None):
         return "workflow/Snakefile_atac"
     elif pipeline == "multiome":
         return "workflow/Snakefile_multiome"
+    elif pipeline == "fixedrna":
+        return "workflow/Snakefile_multi"
     elif pipeline == "spatial":
         return "workflow/Snakefile_spatial"
     else:
