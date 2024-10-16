@@ -69,11 +69,12 @@ if __name__ == '__main__':
     parent_parser.add_argument('-f', '--fastqs', metavar='FASTQPATH', nargs = "*",  \
             action = UniqueStore, required=True, 
             help='Path(s) to fastq files, multiple paths can be provided together. eg. "-f path1 path2"')
-    parent_parser.add_argument('-r', '--reference', metavar='REFERENCE FOLDER', 
-            help='Reference folder for alignment. VDJ reference is needed if subcommand "vdj" \
-            is used.', required=True)
     parent_parser.add_argument('-g', '--genome', 
             help='Genome build, e.g. "hg38", "mm10"', required=True)
+    parent_parser_ref = argparse.ArgumentParser(add_help=False) 
+    parent_parser_ref.add_argument('-r', '--reference', metavar='REFERENCE FOLDER',
+            help='Reference folder for alignment. VDJ reference is needed if subcommand "vdj" \
+            is used.', required=True)
     #parent_parser.add_argument("-n", "--dryrun", action="store_true", help="dry run") 
     #parent_parser.add_argument("--rerun", action="store_true",
     #        help="dry run then prompt for submitting jobs that need to be rerun")
@@ -100,22 +101,24 @@ if __name__ == '__main__':
     parent_parser_vdjchain.add_argument("--chain", default="auto", choices=['auto', 'TR', 'IG'], 
         help="Force the analysis to be carried out for a particular chain type.")
 
+    parent_parser_lib = argparse.ArgumentParser(add_help=False)
+    parent_parser_lib.add_argument("-l", "--library_config",
+        required=True,
+        help="CSV file with the library configration.")
+
     parser = argparse.ArgumentParser(description='scMastro: Comprehensive workflow for processing single cell sequencing data')
     subparsers = parser.add_subparsers(help='sub-command help', dest = 'command')
     ## rna pipeline
     parser_rna = subparsers.add_parser("rna", 
-        parents = [parent_parser, parent_parser_fa, parent_parser_cellnum], 
+        parents = [parent_parser, parent_parser_ref, parent_parser_fa, parent_parser_cellnum], 
         help='Snakemake pipeline for 10x scRNA-seq data analysis')
 
     ## multi pipeline
     parser_multi = subparsers.add_parser("multi", 
-        parents = [parent_parser, parent_parser_vdjchain, parent_parser_fa], 
+        parents = [parent_parser, parent_parser_ref, parent_parser_vdjchain, parent_parser_fa, parent_parser_lib], 
         help='Snakemake pipeline for 10x CellRanger multi data analysis')
     parser_multi.add_argument("--vdj_ref",
         help="Reference folder for VDJ data ")
-    parser_multi.add_argument("-l", "--library_config", 
-        required=True, 
-        help="CSV file with the library configration. ")
     #parser_multi.add_argument("--ref_vdj", type = str,  
     #    help="Reference folder for VDJ data ")
     parser_multi.add_argument("--cmo", action="store_true",
@@ -125,35 +128,42 @@ if __name__ == '__main__':
                 with more 10 individuals mixed. ")
      
     parser_vdj = subparsers.add_parser("vdj", 
-        parents = [parent_parser, parent_parser_vdjchain], 
+        parents = [parent_parser, parent_parser_ref, parent_parser_vdjchain], 
         help='Snakemake pipeline for 10x VDJ data')
     
     parser_atac = subparsers.add_parser("atac", 
-        parents = [parent_parser, parent_parser_fa], 
+        parents = [parent_parser, parent_parser_ref], 
         help='Snakemake pipeline for 10x scATAC-seq data analysis')
 
     parser_multiome = subparsers.add_parser("multiome", 
-        parents = [parent_parser, parent_parser_cellnum], 
+        parents = [parent_parser, parent_parser_ref, parent_parser_cellnum, parent_parser_lib], 
         help='Snakemake pipeline for 10x Multiome ATAC + GEX data')
-    parser_multiome.add_argument("-l", "--library_config",
-        required=True,
-        help="CSV file with the library configration. ")
     
-    parser_spatial = subparsers.add_parser("spatial", 
-        parents = [parent_parser], 
-        help='Snakemake pipeline for 10x spatial data')
-    parser_spatial.add_argument("--images", metavar="images",
-        action = "store", type=str, required= True, 
-        help="Metadata for image information. [Required if spatial pipeline is used]")
-    spatial_methods = ["cytassist_v1", "cytassist_v2", "non_cytassist"]
-    parser_spatial.add_argument("--spatial-method", 
-        metavar=f"spatial_method {spatial_methods}", 
-        type=str, choices = spatial_methods, required= True, 
-        help="""Specify the method used for spatial transcriptomics analysis. \
-              Options:                                                        \
-              - 'cytassist_v1': Employ Cytassist method using probe set v1    \
-              - 'cytassist_v2': Employ Cytassist method using probe set v2    \
-              - 'non_cytassist': Employ non-Cytassist method capturing  polyA mRNAs""")
+    parser_fixedrna = subparsers.add_parser("fixedrna", 
+        parents = [parent_parser, parent_parser_lib], 
+        help='Snakemake pipeline for 10x Fixed RNA profiling (FRP) data')
+    parser_fixedrna.add_argument("--probe_set",
+        required=True,
+        help="Probe set for FRP data")
+    parser_fixedrna.add_argument("--singleplex", action = "store_true",
+        help="Singleplex FRP")
+    parser_fixedrna.add_argument("--multiplex", action = "store", type=str,
+        help="Mutiplexing information for FRP")
+    #parser_spatial = subparsers.add_parser("spatial", 
+    #    parents = [parent_parser], 
+    #    help='Snakemake pipeline for 10x spatial data')
+    #parser_spatial.add_argument("--images", metavar="images",
+    #    action = "store", type=str, required= True, 
+    #    help="Metadata for image information. [Required if spatial pipeline is used]")
+    #spatial_methods = ["cytassist_v1", "cytassist_v2", "non_cytassist"]
+    #parser_spatial.add_argument("--spatial-method", 
+    #    metavar=f"spatial_method {spatial_methods}", 
+    #    type=str, choices = spatial_methods, required= True, 
+    #    help="""Specify the method used for spatial transcriptomics analysis. \
+    #          Options:                                                        \
+    #          - 'cytassist_v1': Employ Cytassist method using probe set v1    \
+    #          - 'cytassist_v2': Employ Cytassist method using probe set v2    \
+    #          - 'non_cytassist': Employ non-Cytassist method capturing  polyA mRNAs""")
     
     parser_rerun = subparsers.add_parser("rerun",
         help='Equavalent of snakemake --rerun')
