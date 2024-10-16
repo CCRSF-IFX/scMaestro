@@ -48,8 +48,9 @@ def main(args):
     subprocess.check_output('cp %s/workflow/config/submit_ext.sh submit.sh' % bin_path, shell=True) 
     args.fullanalysis = getattr(args, "fullanalysis", False)
     smk_file = get_smk_file(args.pipeline, args.fullanalysis)
+    #print(smk_file)
     smk_file_re = re.sub(r"/", r"\/", smk_file)
-    print(smk_file_re)
+    #print(smk_file_re)
     os.system("""sed -i "s/snakemake --jobname/snakemake -s %s --jobname /" %s """ % (smk_file_re, "submit.sh"))
     print('CONFIG FILE:')
     with open('config.py') as f:
@@ -132,8 +133,11 @@ if __name__ == '__main__':
         help='Snakemake pipeline for 10x scATAC-seq data analysis')
 
     parser_multiome = subparsers.add_parser("multiome", 
-        parents = [parent_parser], 
+        parents = [parent_parser, parent_parser_cellnum], 
         help='Snakemake pipeline for 10x Multiome ATAC + GEX data')
+    parser_multiome.add_argument("-l", "--library_config",
+        required=True,
+        help="CSV file with the library configration. ")
     
     parser_spatial = subparsers.add_parser("spatial", 
         parents = [parent_parser], 
@@ -158,15 +162,13 @@ if __name__ == '__main__':
     parser_rerun = subparsers.add_parser("unlock",
         help='Equavalent of snakemake --unlock')
     args = parser.parse_args()
-    multi_conditional_required_flag(args, parser)
-    print(args)
     dict_cmd = vars(args)
     if dict_cmd['command'] is None:
         parser.print_help()
         sys.exit(0)
+    multi_conditional_required_flag(args, parser)
     sflog.info("Subcommand is: " + str(dict_cmd['command']))
     sflog.info(args)
-    print(dict_cmd['command'])
     if dict_cmd['command'] == 'dryrun' or dict_cmd['command'] == 'rerun' or dict_cmd['command'] == 'unlock':
         smk_rerun_dryrun_unlock(dict_cmd['command'], subparsers)
     else:
