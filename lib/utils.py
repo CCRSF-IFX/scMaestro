@@ -30,7 +30,7 @@ def write_configfile(args, work_path):
         #if args.pipeline == 'multirna':
         #    f.write('label = ""\n')
         if args.pipeline == 'multiome':
-            f.write('libraries=""\n')
+            f.write(f'libraries="{args.library_config}"\n')
             if args.exclude_introns:
                 f.write('include_introns=False\n')
         if args.pipeline == 'multi':
@@ -74,6 +74,8 @@ def get_smk_file(pipeline, fullanalysis = None):
         return "workflow/Snakefile_vdj"
     elif pipeline == "atac":
         return "workflow/Snakefile_atac"
+    elif pipeline == "multiome":
+        return "workflow/Snakefile_multiome"
     elif pipeline == "spatial":
         return "workflow/Snakefile_spatial"
     else:
