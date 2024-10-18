@@ -28,6 +28,10 @@ You only need to run the command above once.
 conda activate scMastro
 ```
 
+* Set up the configuration files 
+
+Please refer to the section of [Custome setting](https://ccrsf-ifx.github.io/scMaestro/custom_setting/) for details. 
+
 * Run `scMastro`
 
 ```
