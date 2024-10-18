@@ -38,7 +38,8 @@ nav:
       - Subcommand `multi`: multi.md
       - Subcommand `vdj`: vdj.md
       - Subcommand `fixedrna`: fixedrna.md
-
+  - Todo:
+      - todo: todo.md
   #- FAQ:
   #    - General Questions: general-questions.md
   #    - Troubleshooting: troubleshooting.md
