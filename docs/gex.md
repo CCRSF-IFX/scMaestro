@@ -26,4 +26,8 @@ optional arguments:
                         Gene Expression and 3’ Cell Multiplexing experiments,
                         introns will be included in the analysis by default
                         for cellranger (>v7.0.0) count and multi.
-``` 
+```
+
+## Option '--fullanalysis'
+
+If `--fullanalysis` is enabled. Quality control, PCA, clustering, annotation will be performed for each sample seperately using `Seurat` and `SingleR`. An html report will be generated. An example can be found [here](https://github.com/CCRSF-IFX/SF_sc-smk-wl/blob/main/data/10k_PBMC_3p_nextgem_Chromium_X_sc_report.html). 
