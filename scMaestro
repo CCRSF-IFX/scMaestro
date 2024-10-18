@@ -16,6 +16,9 @@ from lib.utils import prep_ref, get_smk_file, write_configfile, get_config_val
 from lib.smk_arg import smk_rerun_dryrun_unlock
 from lib.argparse_multi import multi_conditional_required_flag
 
+# ARC-v1 for analyzing the GEX portion of multiome data. NOTE: this mode cannot be auto-detected.
+ASSAY_CHEMISTRY = ['auto', 'threeprime', 'fiveprime', 'SC3Pv2', 'SC3Pv3', 'SC3Pv3LT', 'SC3Pv3HT', 'SC5P-PE', 'SC5P-R2', 'SC3Pv1']
+
 # get the path of the script
 bin_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -105,6 +108,11 @@ if __name__ == '__main__':
     parent_parser_lib.add_argument("-l", "--library_config",
         required=True,
         help="CSV file with the library configration.")
+    
+    parent_chemistry = argparse.ArgumentParser(add_help=False)
+    parent_chemistry.add_argument("--chemistry",
+        type=str, choices = ASSAY_CHEMISTRY,   
+        help="CSV file with the library configration.")
 
     parser = argparse.ArgumentParser(description='scMastro: Comprehensive workflow for processing single cell sequencing data')
     subparsers = parser.add_subparsers(help='sub-command help', dest = 'command')
@@ -115,7 +123,8 @@ if __name__ == '__main__':
 
     ## multi pipeline
     parser_multi = subparsers.add_parser("multi", 
-        parents = [parent_parser, parent_parser_ref, parent_parser_vdjchain, parent_parser_fa, parent_parser_lib], 
+        parents = [parent_parser, parent_parser_ref, parent_parser_vdjchain, 
+                   parent_chemistry, parent_parser_fa, parent_parser_lib], 
         help='Snakemake pipeline for 10x CellRanger multi data analysis')
     parser_multi.add_argument("--vdj_ref",
         help="Reference folder for VDJ data ")
@@ -134,6 +143,9 @@ if __name__ == '__main__':
     parser_atac = subparsers.add_parser("atac", 
         parents = [parent_parser, parent_parser_ref], 
         help='Snakemake pipeline for 10x scATAC-seq data analysis')
+    parser_atac.add_argument("--chemistry",
+        type=str, choices = ["ARC-v1"],
+        help="CSV file with the library configration.")
 
     parser_multiome = subparsers.add_parser("multiome", 
         parents = [parent_parser, parent_parser_ref, parent_parser_cellnum, parent_parser_lib], 

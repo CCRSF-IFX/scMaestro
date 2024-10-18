@@ -17,11 +17,6 @@ def write_configfile(args, work_path):
                 f.write('include_introns=False\n')
         if args.pipeline == 'pipseq' and args.force:
             f.write('numcells="%s"\n' % str(args.force)) 
-        #if args.force:
-        #    if not (vars(args)["command"] == 'vdj':
-        #        f.write('forcecells=True\n')
-        #    if args.pipeline == 'atac':
-        #        f.write('numcells=""\n')
         if hasattr(args, 'cmo') and args.cmo:
             f.write('cmo="%s"\n' % args.cmo)
         if args.pipeline == 'fb':
@@ -60,6 +55,8 @@ def write_configfile(args, work_path):
             f.write('images="%s"\n' % args.images)
             f.write('spatial_method="%s"\n' % args.spatial_method)
         f.write('pipeline="%s"\n' % str(args.pipeline))
+        if hasattr(args, 'chemistry') and args.chemistry != None:
+            f.write('chemistry="%s"\n' % args.chemistry) 
         if args.pipeline != "fixedrna":
             f.write("#aggregate=False # Recommended value to set as 'False' when 1) three are too many samples (>10); 2) no donor and origin information provided for VDJ libraries;\n")
         else:
