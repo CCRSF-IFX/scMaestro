@@ -1,6 +1,8 @@
-# 
+# workflow: 'atac'
 
-## 
+Workflow 'atac' can analyze 10x scATAC-seq data. 
+
+## Usage 
 
 ```
 ./scMaestro atac -h 
