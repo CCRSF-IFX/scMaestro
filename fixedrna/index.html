@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Shaojun Xie @ CCRSFIFX" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Subcommand `fixedrna` - scMaestro Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Subcommand `fixedrna`";
+        var mkdocs_page_input_path = "fixedrna.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> scMaestro Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="..">About</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/">Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../custom_setting/">Custom setting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../gex/">Subcommand `rna`</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi/">Subcommand `multi`</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vdj/">Subcommand `vdj`</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Subcommand `fixedrna`</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#information-required-before-running-the-pipeline">Information required before running the pipeline</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-run">How to run</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Todo</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../todo/">todo</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">scMaestro Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Usage</li>
+      <li class="breadcrumb-item active">Subcommand `fixedrna`</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/CCRSF-IFX/scMaestro/edit/main/docs/fixedrna.md">Edit on CCRSF-IFX/scMaestro</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="single-cell-fixed-rna-profiling-workflow-fixedrna">Single Cell Fixed RNA Profiling workflow: <code>fixedrna</code></h2>
+<h3 id="information-required-before-running-the-pipeline">Information required before running the pipeline</h3>
+<ul>
+<li>
+<p>Reference/Probe_set </p>
+</li>
+<li>
+<p>Singleplex or multiplex library </p>
+</li>
+</ul>
+<h3 id="how-to-run">How to run</h3>
+<pre><code>./scMaestro fixedrna --help 
+usage: scMaestro fixedrna [-h] -f [FASTQPATH [FASTQPATH ...]] -g GENOME -l
+                          LIBRARY_CONFIG --probe_set PROBE_SET [--singleplex]
+                          [--multiplex MULTIPLEX]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f [FASTQPATH [FASTQPATH ...]], --fastqs [FASTQPATH [FASTQPATH ...]]
+                        Path(s) to fastq files, multiple paths can be provided
+                        together. eg. &quot;-f path1 path2&quot;
+  -g GENOME, --genome GENOME
+                        Genome build, e.g. &quot;hg38&quot;, &quot;mm10&quot;
+  -l LIBRARY_CONFIG, --library_config LIBRARY_CONFIG
+                        CSV file with the library configration.
+  --probe_set PROBE_SET
+                        Probe set for FRP data
+  --singleplex          Singleplex FRP
+  --multiplex MULTIPLEX
+                        Mutiplexing information for FRP
+</code></pre>
+<p>The parameters <code>--singleplex</code> and <code>--multiplex</code> are mutually excluesive and at least one of them has to be specified.</p>
+<p>Here is an exmaple of <code>config.py</code> file: </p>
+<pre><code>unaligned=[&quot;/mnt/ccrsf-static/Analysis/xies4/github_repos/pipeline_dev_test/raw_fastq/fixedrna/221102_VH00271_218_AAC3K5WM5/AAC3K5WM5/outs/fastq_path/AAC3K5WM5&quot;]
+analysis=&quot;/mnt/ccrsf-static/Analysis/xies4/github_repos/pipeline_dev_test/test_fixedscRNA_singleplex/BaoTran_CS033083_1scRNAseq_FixedRNA_101422/Analysis&quot;
+ref=&quot;hg38&quot;
+projectname=&quot;BaoTran_CS033083_1scRNAseq_FixedRNA_101422&quot;
+libraries=&quot;libraries.csv&quot;
+probe_set=&quot;/mnt/ccrsf-ifx/Software/tools/GemCode/cellranger-7.0.1/probe_sets/Chromium_Human_Transcriptome_Probe_Set_v1.0_GRCh38-2020-A.csv&quot;
+pipeline=&quot;fixedrna&quot;
+aggregate=False # Default value for fixedrna
+</code></pre>
+<p>Here is <code>libraries.csv</code>:</p>
+<p>Name,Flowcell,Sample,Type
+LIB1,AAC3K5WM5,LIB1,Gene Expression
+LIB2,AAC3K5WM5,LIB2,Gene Expression
+LIB3,AAC3K5WM5,LIB3,Gene Expression</p>
+<p>For multiplexed libraries, here is the config file: </p>
+<pre><code>unaligned=[&quot;/mnt/ccrsf-static/Analysis/xies4/github_repos/pipeline_dev_test/test_fixedscRNA/223LH3LT1/outs/fastq_path/223LH3LT1&quot;]
+analysis=&quot;/mnt/ccrsf-static/Analysis/xies4/github_repos/pipeline_dev_test/test_fixedscRNA/Analysis&quot;
+ref=&quot;hg38&quot;
+projectname=&quot;DanielMcVicar_CS036898_4fixedscRNA_07302024&quot;
+pipeline=&quot;fixedrna&quot;
+probe_set=&quot;/mnt/ccrsf-ifx/Software/tools/GemCode/cellranger-8.0.1/probe_sets/Chromium_Human_Transcriptome_Probe_Set_v1.0.1_GRCh38-2020-A.csv&quot;
+libraries=&quot;libraries.csv&quot;
+multiplex=&quot;multiplex.csv&quot;
+aggregate=False # Default value for fixedrna 
+</code></pre>
+<p><code>libraries.csv</code> is the sample as singleplex library. </p>
+<p>Here is an example for <code>multiplex.csv</code></p>
+<pre><code>Name,sample_id,probe_barcode_ids,description
+pool_1,Young_RepSox_3nM,BC001,Young_RepSox_3nM
+pool_1,Young_PC3EVNeut,BC002,Young_PC3EVNeut
+pool_2,Young_Enza_20uM,BC001,Young_Enza_20uM
+pool_2,Aged_PC3EV,BC002,Aged_PC3EV
+pool_3,Young_Combo,BC001,Young_Combo
+pool_3,MDA_PCa2b,BC004,MDA_PCa2b
+pool_4,Young_PC3EV,BC001,Young_PC3EV
+pool_4,Young_PC3Stat5,BC002,Young_PC3Stat5
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../vdj/" class="btn btn-neutral float-left" title="Subcommand `vdj`"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../todo/" class="btn btn-neutral float-right" title="todo">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2024 CCRSFIFX</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/CCRSF-IFX/scMaestro.git" class="fa fa-code-fork" style="color: #fcfcfc"> CCRSF-IFX/scMaestro</a>
+        </span>
+    
+    
+      <span><a href="../vdj/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../todo/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
