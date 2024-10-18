@@ -4,7 +4,7 @@
 
 ## Quick start
 
-To run `scMastro`, activation of an conda environment `singularity` are required.
+To run `scMastro`, activation of an conda environment `singularity (>v4.1.5)` are required.
 
 * Clone git repo
 
