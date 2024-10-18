@@ -31,12 +31,14 @@ nav:
   - Introduction:
       - About: index.md
       - Design: design.md
-      - run: internal/run.md
+        #- run: internal/run.md
       - Custom setting: custom_setting.md 
   - Usage:
       - Subcommand `rna`: gex.md
       - Subcommand `multi`: multi.md
       - Subcommand `vdj`: vdj.md
+      - Subcommand `fixedrna`: fixedrna.md
+
   - FAQ:
       - General Questions: general-questions.md
       - Troubleshooting: troubleshooting.md
