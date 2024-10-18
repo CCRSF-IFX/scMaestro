@@ -30,4 +30,4 @@ optional arguments:
 
 ## Option '--fullanalysis'
 
-If `--fullanalysis` is enabled. Quality control, PCA, clustering, annotation will be performed for each sample seperately using `Seurat` and `SingleR`. An html report will be generated. An example can be found [here](https://github.com/CCRSF-IFX/SF_sc-smk-wl/blob/main/data/10k_PBMC_3p_nextgem_Chromium_X_sc_report.html). 
+If `--fullanalysis` is enabled. Quality control, PCA, clustering, annotation will be performed for each sample seperately using `Seurat` and `SingleR`. An html report will be generated. An example can be found [here](https://github.com/CCRSF-IFX/SF_sc-smk-wl/blob/main/data/10k_PBMC_3p_nextgem_Chromium_X_sc_report.html). You can donwload and visulaize the file in web browser.  
