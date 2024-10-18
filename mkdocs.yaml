@@ -39,7 +39,7 @@ nav:
       - Subcommand `vdj`: vdj.md
       - Subcommand `fixedrna`: fixedrna.md
 
-  - FAQ:
-      - General Questions: general-questions.md
-      - Troubleshooting: troubleshooting.md
+  #- FAQ:
+  #    - General Questions: general-questions.md
+  #    - Troubleshooting: troubleshooting.md
   - License: license.md
