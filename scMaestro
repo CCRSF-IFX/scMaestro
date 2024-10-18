@@ -21,7 +21,7 @@ bin_path = os.path.dirname(os.path.realpath(__file__))
 
 work_path = os.getcwd()
 os.chdir(work_path)
-print(work_path)
+#print(work_path)
 
 class UniqueStore(argparse.Action):
     def __call__(self, parser, namespace, values, option_string):
