@@ -22,3 +22,16 @@ optional arguments:
 ```
 
 
+## Example 
+
+### Download example data 
+
+You can download the data from the link here: [10k Human PBMCs, ATAC v2, Chromium X]
+(https://www.10xgenomics.com/datasets/10k-human-pbmcs-atac-v2-chromium-x-2-standard)
+
+### Run `atac` subcommand 
+
+
+```
+
+``` 
