@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Shaojun Xie @ CCRSFIFX" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Subcommand `rna` - scMaestro Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Subcommand `rna`";
+        var mkdocs_page_input_path = "gex.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> scMaestro Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="..">About</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/">Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../custom_setting/">Custom setting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Subcommand `rna`</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#workflow-rna-usage">Workflow rna usage</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#option-fullanalysis">Option '--fullanalysis'</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-data">Example data</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#download-the-raw-reads">Download the raw reads</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#download-the-reference-genome">Download the reference genome</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../multi/">Subcommand `multi`</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vdj/">Subcommand `vdj`</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fixedrna/">Subcommand `fixedrna`</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Todo</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../todo/">todo</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">scMaestro Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Usage</li>
+      <li class="breadcrumb-item active">Subcommand `rna`</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/CCRSF-IFX/scMaestro/edit/main/docs/gex.md">Edit on CCRSF-IFX/scMaestro</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="subcommand-rna">Subcommand <code>rna</code></h1>
+<h2 id="workflow-rna-usage">Workflow <code>rna</code> usage</h2>
+<pre><code>./scMaestro rna -h 
+usage: scMaestro rna [-h] -f [FASTQPATH [FASTQPATH ...]] -g GENOME -r
+                     REFERENCE FOLDER [--fullanalysis]
+                     [--force FORCE | --expect EXPECT] [--exclude-introns]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f [FASTQPATH [FASTQPATH ...]], --fastqs [FASTQPATH [FASTQPATH ...]]
+                        Path(s) to fastq files, multiple paths can be provided
+                        together. eg. &quot;-f path1 path2&quot;
+  -g GENOME, --genome GENOME
+                        Genome build, e.g. &quot;hg38&quot;, &quot;mm10&quot;
+  -r REFERENCE FOLDER, --reference REFERENCE FOLDER
+                        Reference folder for alignment. VDJ reference is
+                        needed if subcommand &quot;vdj&quot; is used.
+  --fullanalysis        Run full analysis pipeline
+  --force FORCE         Run Cell Ranger with --force-cell
+  --expect EXPECT       Run Cell Ranger with --expect-cells
+  --exclude-introns     Exclude intronic reads in count. To maximize
+                        sensitivity for whole transcriptome 3’/5’ Single Cell
+                        Gene Expression and 3’ Cell Multiplexing experiments,
+                        introns will be included in the analysis by default
+                        for cellranger (&gt;v7.0.0) count and multi.
+</code></pre>
+<h2 id="option-fullanalysis">Option '--fullanalysis'</h2>
+<p>If <code>--fullanalysis</code> is enabled. Quality control, PCA, clustering, annotation will be performed for each sample seperately using <code>Seurat</code> and <code>SingleR</code>. An html report will be generated. An example can be found <a href="https://github.com/CCRSF-IFX/SF_sc-smk-wl/blob/main/data/10k_PBMC_3p_nextgem_Chromium_X_sc_report.html">here</a>. You can donwload and visulaize the file in web browser.</p>
+<h2 id="example-data">Example data</h2>
+<h3 id="download-the-raw-reads">Download the raw reads</h3>
+<pre><code>wget https://s3-us-west-2.amazonaws.com/10x.files/samples/cell-exp/6.1.2/10k_PBMC_3p_nextgem_Chromium_X_intron/10k_PBMC_3p_nextgem_Chromium_X_intron_fastqs.tar
+tar xvf 10k_PBMC_3p_nextgem_Chromium_X_intron_fastqs.tar
+ls 10k_PBMC_3p_nextgem_Chromium_X_fastqs/ |cat 
+10k_PBMC_3p_nextgem_Chromium_X_S1_L001_R1_001.fastq.gz
+10k_PBMC_3p_nextgem_Chromium_X_S1_L001_R2_001.fastq.gz
+10k_PBMC_3p_nextgem_Chromium_X_S1_L002_R1_001.fastq.gz
+10k_PBMC_3p_nextgem_Chromium_X_S1_L002_R2_001.fastq.gz
+10k_PBMC_3p_nextgem_Chromium_X_S1_L003_R1_001.fastq.gz
+10k_PBMC_3p_nextgem_Chromium_X_S1_L003_R2_001.fastq.gz
+10k_PBMC_3p_nextgem_Chromium_X_S1_L004_R1_001.fastq.gz
+10k_PBMC_3p_nextgem_Chromium_X_S1_L004_R2_001.fastq.gz
+</code></pre>
+<h3 id="download-the-reference-genome">Download the reference genome</h3>
+<p>Go to 10x Genomics website to download the pre-built reference. 
+The link is <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">here</a> </p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../custom_setting/" class="btn btn-neutral float-left" title="Custom setting"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../multi/" class="btn btn-neutral float-right" title="Subcommand `multi`">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2024 CCRSFIFX</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/CCRSF-IFX/scMaestro.git" class="fa fa-code-fork" style="color: #fcfcfc"> CCRSF-IFX/scMaestro</a>
+        </span>
+    
+    
+      <span><a href="../custom_setting/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../multi/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

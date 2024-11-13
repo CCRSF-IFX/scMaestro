@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Shaojun Xie @ CCRSFIFX" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Subcommand `multi` - scMaestro Documentation</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Subcommand `multi`";
+        var mkdocs_page_input_path = "multi.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> scMaestro Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="..">About</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/">Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../custom_setting/">Custom setting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../gex/">Subcommand `rna`</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Subcommand `multi`</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vdj/">Subcommand `vdj`</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fixedrna/">Subcommand `fixedrna`</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Todo</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../todo/">todo</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">scMaestro Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Usage</li>
+      <li class="breadcrumb-item active">Subcommand `multi`</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/CCRSF-IFX/scMaestro/edit/main/docs/multi.md">Edit on CCRSF-IFX/scMaestro</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="multi"><code>multi</code></h1>
+<p>This pipeline is used in situations when analyzing cell multiplexing data or projects with samples that have both gene expression and VDJ captures. More information about this analysis and when to use it can be found at 10x support webpages:</p>
+<p><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/multi">Cell Multiplexing with cellranger multi</a></p>
+<p><a href="https://support.10xgenomics.com/single-cell-vdj/software/pipelines/latest/using/multi">Gene Expression, V(D)J &amp; Feature Barcode Analysis with cellranger multi</a></p>
+<pre><code>./scMaestro multi -h
+usage: scMaestro multi [-h] -f [FASTQPATH [FASTQPATH ...]] -g GENOME -r
+                       REFERENCE FOLDER [--chain {auto,TR,IG}]
+                       [--fullanalysis] -l LIBRARY_CONFIG [--vdj_ref VDJ_REF]
+                       [--cmo] [--count]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f [FASTQPATH [FASTQPATH ...]], --fastqs [FASTQPATH [FASTQPATH ...]]
+                        Path(s) to fastq files, multiple paths can be provided
+                        together. eg. &quot;-f path1 path2&quot;
+  -g GENOME, --genome GENOME
+                        Genome build, e.g. &quot;hg38&quot;, &quot;mm10&quot;
+  -r REFERENCE FOLDER, --reference REFERENCE FOLDER
+                        Reference folder for alignment. VDJ reference is
+                        needed if subcommand &quot;vdj&quot; is used.
+  --chain {auto,TR,IG}  Force the analysis to be carried out for a particular
+                        chain type.
+  --fullanalysis        Run full analysis pipeline
+  -l LIBRARY_CONFIG, --library_config LIBRARY_CONFIG
+                        CSV file with the library configration.
+  --vdj_ref VDJ_REF     Reference folder for VDJ data
+  --cmo                 CMO information will be used for multi analysis
+  --count               Run cellranger count for projects with HTO libraries
+                        with more 10 individuals mixed.
+</code></pre>
+<p>The libraries csv file would also need to be supplied in <code>config.py</code>. For example:</p>
+<pre><code>libraries=&quot;libraries.csv&quot;
+</code></pre>
+<p>The libraries file would contain the final sample name, flowcell, demultiplex sample name, and library type for each sample. For example:</p>
+<pre><code>Name,Flowcell,Sample,Type
+IL15_LNs,H7CNNBGXG,IL15_LNs,Gene Expression
+IL15_LNs,H7CT7BGXG,IL15_LNs_BC,Antibody Capture
+IL15_TUMOR_CD11,H7CNNBGXG,IL15_TUMOR_CD11,Gene Expression
+IL15_TUMOR_CD11,H7CT7BGXG,IL15_TUMOR_CD11_BC,Antibody Capture
+</code></pre>
+<ul>
+<li>Final sample name will be the name that is given to CellRanger as the name of the sample. </li>
+<li>Flowcell is the flowcell that contains the FASTQ files for this set of data. This can be the full path or just a unique identifier since the script will pull the full path from the config.py file.</li>
+<li>Sample is the sample name that was used when demultiplexing using <code>cellranger mkfastq</code>, and so should match the FASTQ files.</li>
+<li>Type is the library type for each sample. Current supported options are: Gene Expression, VDJ, CRISPR Guide Capture, Antibody Capture, and Multiplexing Capture</li>
+</ul>
+<p>The pipeline will use the provided libraries file to make a library file for each individual sample. This will then be processed again to create the configuration file in the format expected by CellRanger. Due to the lack of CRISPR projects at the facility, the pipeline was never tested for this technology. If this pipeline is run on a sample with CRISPR capture, check the generated sample configuration file to ensure that it matches what is expected. </p>
+<p>For multi task with VDJ libraries, “donor” and “origin” are required in "libraries.csv" for aggregation. The link (here) shows how the donor and origin information will be used in the data analysis:</p>
+<ul>
+<li>Donor: An individual from whom adaptive immune cells (T cells, B cells) are collected (e.g. a sister and a brother would each be considered unique donors for the purposes of V(D)J aggregation).</li>
+<li>Origin: The specific source from which a dataset of cells is derived.</li>
+</ul>
+<pre><code>Name,Flowcell,Sample,Type,Donor,Origin
+</code></pre>
+<p>The chain information is specified in <code>feature_types</code> column. Valid specifications include <code>VDJ</code>, <code>VDJ-T</code>, <code>VDJ-B</code>, or <code>VDJ-T-GD</code>, and the combinations:</p>
+<ul>
+<li>VDJ-T &amp; VDJ-B</li>
+<li>VDJ-T-GD &amp; VDJ-B</li>
+<li>VDJ-T &amp; VDJ-T-GD &amp; VDJ-B</li>
+</ul>
+<p>For <code>multi</code> task with CRISPR Guide Capture libraries, <code>feature_reference</code> column is required to be put in the fifth column in <code>libraries.csv</code>. </p>
+<pre><code>Name,Flowcell,Sample,Type,Feature
+F1Test,AACCCHVM5,F1CRISPR_Library,Gene Expression,crispr_feature_reference1.csv
+F1Test,AACCCHVM5,F1GE_Library,CRISPR Guide Capture,crispr_feature_reference1.csv
+F2Test,AACCCHVM5,F2CRISPR_Library,Gene Expression,crispr_feature_reference2.csv
+F2Test,AACCCHVM5,F2GE_Library,CRISPR Guide Capture,crispr_feature_reference2.csv
+F3Test,AACCCHVM5,F3CRISPR_Library,Gene Expression,crispr_feature_reference3.csv
+F3Test,AACCCHVM5,F3GE_Library,CRISPR Guide Capture,crispr_feature_reference3.csv
+</code></pre>
+<p>The descriptions of the feature reference CSV file can be found <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref">here</a>. In case of varying feature references for different GEX/CRISPR pairs, the fifth column can be used to provide different references.</p>
+<p>If an antibody capture was used, then a feature reference file will need to be provided in the <code>config.py</code> file with a features entry. There is currently no pipeline flag to add this, and it will need to be provided manually. For example:</p>
+<pre><code>features=&quot;features.csv&quot;
+</code></pre>
+<p>The feature reference file would contain (at minimum) a <strong>unique ID</strong>for the feature, human readable name, read, pattern, sequence, and feature type. For example:</p>
+<pre><code>id,name,sequence,feature_type,read,pattern
+CITE_CD64,CD64,AGCAATTAACGGGAG,Antibody Capture,R2,5PNNNNNNNNNN(BC)
+CITE_F4_80,F4_80,TTAACTTCAGCCCGT,Antibody Capture,R2,5PNNNNNNNNNN(BC)
+CITE_CD8a,CD8a,TACCCGTAATAGCGT,Antibody Capture,R2,5PNNNNNNNNNN(BC)
+CITE_XCR1,XCR1,TCCATTACCCACGTT,Antibody Capture,R2,5PNNNNNNNNNN(BC)
+</code></pre>
+<blockquote>
+<p>No space is allowed for the <code>id</code> field and the <code>id</code> must be unique.  </p>
+</blockquote>
+<p>Unless the information is provided, it is probably easiest to determine the pattern by checking the FASTQ file for the sequence location. More information can be found at: https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis</p>
+<p>If a multiplexing capture was used, then the pipeline can be called with the cmo flag. This will add a cmo entry into the config.py file, which can then be edited to provide the cmo (cell multiplexing oligo) reference file. For example:</p>
+<pre><code>cmo=&quot;cmo.csv&quot;
+</code></pre>
+<p>The cmo reference file has a very similar format to the feature reference file. The difference is that the feature type would be Multiplexing Capture. For example:</p>
+<pre><code>id,name,sequence,feature_type,read,pattern
+HTO_1,HTO_1,GTCAACTCTTTAGCG,Multiplexing Capture,R2,5P(BC)
+HTO_2,HTO_2,TGATGGCCTATTGGG,Multiplexing Capture,R2,5P(BC)
+HTO_3,HTO_3,TTCCGCCTCTCTTTG,Multiplexing Capture,R2,5P(BC)
+HTO_4,HTO_4,AGTAAGTTCAGCGTA,Multiplexing Capture,R2,5P(BC)
+</code></pre>
+<p>When the cmo information is filled into the sample configuration file, it will directly use the cmo ID as the multiplexing sample ID. This would need to be manually edited if a different entry would want to be included.</p>
+<p>Once all the supplemental information is filled, use the rerun option in the wrapper to start the pipeline.</p>
+<p>If the CellRanger only analysis was requested, then for 15 samples the pipeline will run the following jobs for single cell multi analysis.</p>
+<blockquote>
+<p>If there are multiple libraries with different features used, you can set <code>cmo</code> as a dictionary with the library Name as key and cmo csv file as value:</p>
+</blockquote>
+<pre><code>cmo={&quot;CD8_d8_1&quot;: &quot;cmo1.csv&quot;, &quot;CD8_d8_2&quot;: &quot;cmo2.csv&quot;, &quot;CD8_d8_3&quot;: &quot;cmo3.csv&quot;}
+</code></pre>
+<p>There is currently no downstream analysis pipeline, and so if it is requested the CellRanger only pipeline would still be run.</p>
+<ul>
+<li>
+<blockquote>
+<p>Note: The <code>premrna</code> flag is deprecated and not used anymore. The exclude-introns can be used to disable include-introns flag in CellRanger. </p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>Note: The <code>force</code> flag and expect flag can be used to use the <code>force-cells</code> flag and <code>expect-cells</code> when running the CellRanger multi analysis. The <code>force</code> flag and <code>expect</code> flag are mutually exclusive. </p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>A Special case (multi with VDJ analysis for selective samples only): </p>
+<ul>
+<li>There may be a project where some samples would require GEX, ADT, but not VDJ analysis while other samples from the same project would require all three analyses. For example: GEX1 and GEX2 are T-cell populations and that is the reason they have GEX and ADT only. While, only GEX3 and GEX4 have VDJ.</li>
+</ul>
+</blockquote>
+<p>Cellranger multi does not support HTO libraries with &gt; 12 multiplexing tags. For projects with this case, we can use --count flag to enable the snakemake pipeline to run ‘cellranger count’. 
+Please see the link below for an example of the command line and config.py:</p>
+<p>https://github.com/CCRSF-IFX/SF-project-tracking/issues/1#issuecomment-1934959534</p>
+<p>An example of ‘libraries.csv’ can be obtained in the link below:
+https://github.com/CCRSF-IFX/SF-project-tracking/issues/1#issuecomment-1934963263</p>
+<p>The type of HTO libraries are set to “Custom”. </p>
+<p>An example of features.csv file can be obtained in the link below:
+https://github.com/CCRSF-IFX/SF-project-tracking/issues/1#issuecomment-1934964902</p>
+<p>The feature_type of HTO barcodes are set to “Custom”. </p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../gex/" class="btn btn-neutral float-left" title="Subcommand `rna`"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../vdj/" class="btn btn-neutral float-right" title="Subcommand `vdj`">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2024 CCRSFIFX</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/CCRSF-IFX/scMaestro.git" class="fa fa-code-fork" style="color: #fcfcfc"> CCRSF-IFX/scMaestro</a>
+        </span>
+    
+    
+      <span><a href="../gex/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../vdj/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
